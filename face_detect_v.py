@@ -20,10 +20,14 @@ while True:
     faces_rect = haar_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors = 3, minSize = (30,30))
     print(f'Number of faces found = {len(faces_rect)}')
 
-    for (x,y,w,h) in faces_rect:
-        cv.rectangle(frame, (x,y), (x+w, y+h), (0,255,0), thickness=2)
 
-    
+    face_found = False #---Initially set the flag to be False
+    for (x,y,w,h) in faces_rect:
+        if w > 0 :                 #--- Set the flag True if w>0 (i.e, if face is detected)
+            face_found = True
+            cv.rectangle(frame, (x,y), (x+w, y+h), (0,255,0), thickness=2)   
+            font = cv.FONT_HERSHEY_SIMPLEX
+            cv.putText(frame,'face_detected',(0,100), font, 1, (200,255,155)) #---write the text
     
         #saving output
     if isTrue:
@@ -31,7 +35,7 @@ while True:
     else:
         break
     i += 1
-
+        #show output image
     cv.imshow('Moving faces', frame)
 
     if cv.waitKey(20) & 0xFF == ord('d'):
